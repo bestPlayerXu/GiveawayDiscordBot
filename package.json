@@ -1,0 +1,21 @@
+{
+  "name": "giveaway",
+  "version": "1.0.0",
+  "description": "A giveaway bot with start in xyz feature.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node -r dotenv/config index.js > logs/runtime.log 2> logs/error.log"
+  },
+  "keywords": [
+    "giveaway",
+    "discord",
+    "bot"
+  ],
+  "author": "bestPlayerXu",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0"
+  }
+}
