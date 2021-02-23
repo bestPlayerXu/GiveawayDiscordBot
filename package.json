@@ -4,8 +4,8 @@
   "description": "A giveaway bot with start in xyz feature.",
   "main": "index.js",
   "scripts": {
-    "test": "node -r dotenv/config index.js",
-    "start": "node -r dotenv/config index.js > logs/runtime.log 2> logs/error.log &",
+    "test": "node -r dotenv/config Main.js",
+    "start": "node -r dotenv/config Main.js > logs/runtime.log 2> logs/error.log &",
     "stop": "kill $(head -1 logs/pid.log)"
   },
   "keywords": [
@@ -18,6 +18,8 @@
   "dependencies": {
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "mariadb": "^2.5.2",
+    "ping-a-monitor": "^5.0.0"
   }
 }
