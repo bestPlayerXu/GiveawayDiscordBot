@@ -18,10 +18,20 @@ process.on('SIGTERM', () => exit());
 process.on('SIGINT', () => exit());
 
 var giveaway;
+var awaitMessages = [];
 
 var update = async () => {
 	console.log('New client!');
-	giveaway = new (importer('Giveaway'))(client);
+	giveaway = new (importer('Giveaway'))(client, async (channel, userId, time, question, fnOnFinish, param) => {
+		await channel.send(question);
+		awaitMessages.push({ channel: channel, userId: userId, fnOnFinish: fnOnFinish, param: param });
+		setTimeout(() => {
+			if (awaitMessages.find(a => a.channel === channel && a.userId === userId)) {
+				channel.send('`Aborting due to timeout. Please try again!`');
+				awaitMessages = awaitMessages.filter(a => a.channel !== channel && a.userId !== userId);
+			}
+		}, time);
+	});
 }
 
 client.on('ready', () => {
@@ -33,6 +43,12 @@ client.on('ready', () => {
 
 client.on('message', msg => {
 	if (msg.author.bot) return;
+	var am = awaitMessages.find(a => a.channel === msg.channel && msg.author.id === a.userId);
+	if (am) {
+		awaitMessages = awaitMessages.filter(a => a !== am);
+		giveaway[am.fnOnFinish](msg, am.param);
+		return;
+	}
 	if (msg.content.startsWith('<@!' + client.user.id + '>') && !giveaway) return msg.reply('Bot in maintainance mode. Try again later!');
 	giveaway.onMessage(msg);
 });
